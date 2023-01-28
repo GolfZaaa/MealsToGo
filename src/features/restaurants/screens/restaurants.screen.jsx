@@ -1,20 +1,27 @@
-import React, { useState } from "react";
-import { StyleSheet, View, SafeAreaView, StatusBar,FlatList } from "react-native";
+import React, { useState, useContext } from "react";
+import {
+  StyleSheet,
+  View,
+  SafeAreaView,
+  StatusBar,
+  FlatList,
+} from "react-native";
 import { Searchbar } from "react-native-paper";
 import { RestaurantInfoCard } from "../components/restaurant-info-card.component";
-import styled from 'styled-components/native'
+import styled from "styled-components/native";
 import { Spacer } from "../../../components/spacer/spacer.component";
 import { SafeArea } from "../../../components/utility/safe-area.component";
+import { RestaurantsContext } from "../../../services/restaurants/restaurants.context";
 
 const Searchcontainer = styled.View`
-padding: ${(props) => props.theme.space[3]};
-`
+  padding: ${(props) => props.theme.space[3]};
+`;
 
 const RestaurantListContainer = styled.View`
-flex: 1;
+  flex: 1;
   padding: 16px;
-  background-Color: blanchedalmond;
-`
+  background-color: blanchedalmond;
+`;
 
 const RestaurantList = styled(FlatList).attrs({
   contentContainerStyle: {
@@ -22,11 +29,13 @@ const RestaurantList = styled(FlatList).attrs({
   },
 })``;
 
-
 export const RestaurantsScreen = () => {
-    const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
-    const onChangeSearch = (query) => setSearchQuery(query);
+  const onChangeSearch = (query) => setSearchQuery(query);
+
+  const restaurantContext = useContext(RestaurantsContext);
+  console.log(restaurantContext);
 
   return (
     <>
@@ -40,53 +49,36 @@ export const RestaurantsScreen = () => {
         </Searchcontainer>
         {/* <RestaurantListContainer> */}
         <RestaurantList
-        data={[
-          { name: 1 },
-          { name: 2 },
-          { name: 3 },
-          { name: 4 },
-          { name: 5 },
-          { name: 6 },
-          { name: 7 },
-          { name: 8 },
-          { name: 9 },
-          { name: 10 },
-          { name: 11 },
-          { name: 12 },
-          { name: 13 },
-          { name: 14 },
-        ]}
-        renderItem={() => (
-          <Spacer position="bottom" size="large">
-            <RestaurantInfoCard />
-          </Spacer>
-        )}
-        keyExtractor={(item) => item.name}
-        contentContainerStyle={{ padding: 16 }}
-      />
+          data={restaurantContext.restaurants}
+          renderItem={() => (
+            <Spacer position="bottom" size="large">
+              <RestaurantInfoCard />
+            </Spacer>
+          )}
+          keyExtractor={(item,index) => index}
+          contentContainerStyle={{ padding: 16 }}
+        />
 
-        
         {/* </RestaurantListContainer> */}
       </SafeArea>
     </>
   );
 };
 
-
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: "#fff",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    // search: {
-    //   padding: 16,
-    //   backgroundColor: "blanchedalmond",
-    // },
-    // list: {
-    //     flex: 1,
-    //     padding: 16,
-    //     backgroundColor: "beige",
-    //   },
-  });
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  // search: {
+  //   padding: 16,
+  //   backgroundColor: "blanchedalmond",
+  // },
+  // list: {
+  //     flex: 1,
+  //     padding: 16,
+  //     backgroundColor: "beige",
+  //   },
+});
